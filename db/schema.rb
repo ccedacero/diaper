@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_05_164501) do
+ActiveRecord::Schema.define(version: 2020_09_06_150357) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -131,6 +131,8 @@ ActiveRecord::Schema.define(version: 2020_04_05_164501) do
     t.string "agency_rep"
     t.boolean "reminder_email_enabled", default: false, null: false
     t.integer "state", default: 0, null: false
+    t.datetime "issued_at_end"
+    t.boolean "issued_at_timeframe_enabled", default: false
     t.index ["organization_id"], name: "index_distributions_on_organization_id"
     t.index ["partner_id"], name: "index_distributions_on_partner_id"
     t.index ["storage_location_id"], name: "index_distributions_on_storage_location_id"
@@ -348,6 +350,8 @@ ActiveRecord::Schema.define(version: 2020_04_05_164501) do
     t.string "name", default: "CHANGEME", null: false
     t.boolean "super_admin", default: false
     t.datetime "last_request_at"
+    t.datetime "discarded_at"
+    t.index ["discarded_at"], name: "index_users_on_discarded_at"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
     t.index ["invitations_count"], name: "index_users_on_invitations_count"

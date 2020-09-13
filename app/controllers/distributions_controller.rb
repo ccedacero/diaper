@@ -58,12 +58,11 @@ class DistributionsController < ApplicationController
 
     if result.success?
       session[:created_distribution_id] = result.distribution.id
-      redirect_to(distributions_path, notice: "Distribution created!") && return
+      redirect_to(distribution_path(result.distribution), notice: "Distribution created!") && return
     else
       @distribution = result.distribution
       flash[:error] = insufficient_error_message(result.error.message)
-      # NOTE: Can we just do @distribution.line_items.build, regardless?
-      @distribution.line_items.build if @distribution.line_items.count.zero?
+      @distribution.line_items.build if @distribution.line_items.size.zero?
       @items = current_organization.items.alphabetized
       @storage_locations = current_organization.storage_locations.alphabetized
       render :new
@@ -160,7 +159,7 @@ class DistributionsController < ApplicationController
   end
 
   def distribution_params
-    params.require(:distribution).permit(:comment, :agency_rep, :issued_at, :partner_id, :storage_location_id, :reminder_email_enabled, line_items_attributes: %i(item_id quantity _destroy))
+    params.require(:distribution).permit(:comment, :agency_rep, :issued_at, :issued_at_timeframe_enabled, :issued_at_end, :partner_id, :storage_location_id, :reminder_email_enabled, line_items_attributes: %i(item_id quantity _destroy))
   end
 
   def request_id
